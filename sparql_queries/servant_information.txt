@@ -1,0 +1,21 @@
+% Before 1834
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX oldbailey: <http://cltl.nl/oldbailey/>
+SELECT ?p ?dm ?g WHERE {
+    ?p rdf:type oldbailey:Person .
+    ?p oldbailey:occupation ?d .
+    ?d oldbailey:mention ?dm .
+    ?p oldbailey:gender ?g
+    filter(regex(?dm, "servant"))
+}
+
+% After 1834
+ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX oldbailey: <http://cltl.nl/oldbailey/>
+SELECT ?p ?g ?dm WHERE {
+    ?p rdf:type oldbailey:Person .
+    ?p oldbailey:occupation ?dm .
+    ?p oldbailey:gender ?g .
+    filter regex(str(?dm), "servant")
+}

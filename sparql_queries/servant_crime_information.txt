@@ -1,0 +1,60 @@
+% Before 1834
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX oldbailey: <http://cltl.nl/oldbailey/>
+SELECT ?def ?gender ?mention ?offcat ?offsubcat WHERE {
+    ?event rdf:type oldbailey:Event .
+
+    ?event oldbailey:criminalCharge ?def .
+
+    ?person rdf:type oldbailey:Person .
+    filter(?person = ?def)
+    ?person oldbailey:gender ?gender .
+    ?person oldbailey:occupation ?occupation .
+    ?occupation oldbailey:mention ?mention .
+
+    filter(regex(?mention, "servant"))
+
+    ?event oldbailey:offenceCategory ?offcat .
+    OPTIONAL{?event oldbailey:offenceSubcategory ?offsubcat .}
+    ?event oldbailey:trial ?trial .
+
+    #?verdict rdf:type oldbailey:verdictDescription .
+    #?verdict oldbailey:trial ?trial2 .
+    #filter(?trial = ?trial2)
+    #?verdict oldbailey:verdictCategory ?verdictcat .
+
+    #?punish rdf:type oldbailey:punishmentDescription .
+    #?punish oldbailey:trial ?trial3 .
+    #filter(?trial = ?trial3)
+    #?punish oldbailey:punishmentCategory ?punishcat .
+}
+
+% After 1834
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX oldbailey: <http://cltl.nl/oldbailey/>
+SELECT ?def ?gender ?offcat ?offsubcat WHERE {
+    ?event rdf:type oldbailey:Event .
+
+    ?event oldbailey:criminalCharge ?def .
+
+    ?person rdf:type oldbailey:Person .
+    filter(?person = ?def)
+    ?person oldbailey:gender ?gender .
+    ?person oldbailey:occupation ?mention .
+
+    filter(regex(str(?mention), "servant"))
+
+    ?event oldbailey:offenceCategory ?offcat .
+    OPTIONAL{?event oldbailey:offenceSubcategory ?offsubcat .}
+    ?event oldbailey:trial ?trial .
+
+    #?verdict rdf:type oldbailey:verdictDescription .
+    #?verdict oldbailey:trial ?trial2 .
+    #filter(?trial = ?trial2)
+    #?verdict oldbailey:verdictCategory ?verdictcat .
+
+    #?punish rdf:type oldbailey:punishmentDescription .
+    #?punish oldbailey:trial ?trial3 .
+    #filter(?trial = ?trial3)
+    #?punish oldbailey:punishmentCategory ?punishcat .
+}

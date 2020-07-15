@@ -1,0 +1,35 @@
+% Before 1834
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX oldbailey: <http://cltl.nl/oldbailey/>
+SELECT ?occupation ?offcat ?offsubcat WHERE {
+    ?p rdf:type oldbailey:Person .
+    ?p oldbailey:occupation ?d .
+    ?d oldbailey:mention ?occupation .
+    ?p oldbailey:gender ?gender .
+    filter(regex(str(?gender), "female"))
+    filter(regex(str(?p), "def"))
+
+    ?event rdf:type oldbailey:Event .
+    ?event oldbailey:criminalCharge ?def .
+    filter(?def = ?p)
+    ?event oldbailey:offenceCategory ?offcat .
+    OPTIONAL{?event oldbailey:offenceSubcategory ?offsubcat .}
+}
+
+% After 1834
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX oldbailey: <http://cltl.nl/oldbailey/>
+SELECT ?occupation ?offcat ?offsubcat WHERE {
+    ?p rdf:type oldbailey:Person .
+    ?p oldbailey:occupation ?occupation .
+    ?p oldbailey:gender ?gender .
+    filter(!regex(str(?occupation), "label"))
+    filter(regex(str(?gender), "female")) .
+    filter(regex(str(?p), "def")) .
+
+    ?event rdf:type oldbailey:Event .
+    ?event oldbailey:criminalCharge ?def .
+    filter(?def = ?p) .
+    ?event oldbailey:offenceCategory ?offcat .
+    OPTIONAL{?event oldbailey:offenceSubcategory ?offsubcat .}
+}
